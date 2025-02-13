@@ -180,6 +180,7 @@ public class DLL {
         } else if (temp.next == null) {
             System.out.println("No node after this node");
         } else {
+            size--;
             System.out.println("Data deleted is: " + temp.next.data);
             temp.next = temp.next.next;
             if (temp.next != null)
@@ -192,12 +193,82 @@ public class DLL {
             System.out.println("Linked list is empty, nothing to delete");
             return;
         }
+        if (head.data == k) {
+            System.out.println("No node before this node");
+            return;
+        }
+        Node temp = head;
+        while (temp != null) {
+            if (temp.data == k)
+                break;
+            temp = temp.next;
+        }
+        if (temp == null) {
+            System.out.println("Node not found");
+            return;
+        }
+        size--;
+        System.out.println("Data deleted is: " + temp.prev.data);
+        temp.prev = temp.prev.prev;
+        if (temp.prev != null)
+            temp.prev.next = temp;
+        else
+            head = temp;
     }
 
     public static void deleteFromPosition(int k) {
         if (head == null) {
             System.out.println("Linked list is empty, nothing to delete");
             return;
+        }
+        if (k < 1) {
+            System.out.println("Invalid position");
+            return;
+        }
+        if (k == 1) {
+            System.out.println("Data deleted is: " + head.data);
+            head = head.next;
+            if (head != null)
+                head.prev = null;
+            size--;
+            return;
+        }
+
+        Node temp = head;
+        for (int i = 1; i < k && temp != null; i++) {
+            temp = temp.next;
+        }
+
+        if (temp == null) {
+            System.out.println("Invalid position");
+            return;
+        }
+
+        System.out.println("Data deleted is: " + temp.data);
+        if (temp.next != null)
+            temp.next.prev = temp.prev;
+        temp.prev.next = temp.next;
+        size--;
+    }
+
+    public static void reverse() {
+        if (head == null) {
+            System.out.println("Linked list is empty");
+            return;
+        } else if (head.next == null) {
+            System.out.println("Reversed list is: ");
+            display();
+        } else {
+            Node last = null, curr = head;
+            while (curr != null) {
+                last = curr.prev;
+                curr.prev = curr.next;
+                curr.next = last;
+                curr = curr.prev;
+            }
+            head = last.prev;
+            System.out.println("Reversed list is: ");
+            display();
         }
     }
 
@@ -211,7 +282,7 @@ public class DLL {
         Node curr = head;
         while (curr != null) {
             count++;
-            System.out.print(curr.data + "->");
+            System.out.print(curr.data + "<->");
             curr = curr.next;
         }
         System.out.println("END");
@@ -224,7 +295,7 @@ public class DLL {
 
         while (true) {
             System.out.println(
-                    "1: Insert First\n2: Insert Last\n3: Insert After Node N\n4: Insert Before Node N\n5: Insert At Position K\n6: Delete First\n7: Delete Last\n8: Delete After Node N\n9: Delete Before Node N \n10: Delete From Position K\n11: Display \n0: Exit");
+                    "1: Insert First\n2: Insert Last\n3: Insert After Node N\n4: Insert Before Node N\n5: Insert At Position K\n6: Delete First\n7: Delete Last\n8: Delete After Node N\n9: Delete Before Node N \n10: Delete From Position K\n11: Reverse\n12: Display\n0: Exit");
             int choice = sc.nextInt();
             switch (choice) {
                 case 0:
@@ -284,6 +355,9 @@ public class DLL {
                     deleteFromPosition(k);
                     break;
                 case 11:
+                    reverse();
+                    break;
+                case 12:
                     display();
                     break;
                 default:
